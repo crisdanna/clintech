@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>Cadastrar Agendamento</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" fxLayout="column" fxLayoutAlign="start stretch">
+    <mat-form-field appearance="fill" formGroupName="treatment">
+      <mat-label>Procedimento</mat-label>
+      <mat-select
+        formControlName="procedure"
+        [compareWith]="compareSelectedObject"
+      >
+        <mat-option *ngFor="let procedure of procedures" [value]="procedure">
+          {{ procedure.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Profissional</mat-label>
+      <mat-select
+        formControlName="professional"
+        [compareWith]="compareSelectedObject"
+      >
+        <mat-option
+          *ngFor="let professional of professionals"
+          [value]="professional"
+        >
+          {{ professional.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Data</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startPicker"
+        id="startDate"
+        formControlName="date"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="startPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button cdkFocusInitial (click)="onSubmit()">Salvar</button>
+</div>
