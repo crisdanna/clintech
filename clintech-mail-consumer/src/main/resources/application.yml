@@ -1,0 +1,15 @@
+
+spring:
+    profiles:
+        active: ${ACTIVE_PROFILE:dev}
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: cristiane.danna
+        password: wljvzxkrfihxdvli
+        properties:
+            mail: 
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true

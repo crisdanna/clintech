@@ -1,0 +1,11 @@
+#RabbitMQ settings
+spring:
+    rabbitmq:
+        host: localhost
+        virtualhost: /
+        username: guest
+        password: guest
+
+rabbitmq:
+    queue: rabbitmq.queue
+    exchange: rabbitmq.exchange

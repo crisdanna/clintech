@@ -1,0 +1,93 @@
+
+# Start docker desktop
+# Maybe is necessary install docker compose using the command: docker-compose pull
+# Run using command (this option makes terminal blocked): docker-compose up db 
+# Run using command (this option makes terminal free): docker-compose up -d
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "pg_adm123"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+    ports:
+      - "5432:5432" 
+    volumes:
+      #From Github without microservices files
+      - ./sql/address_create.sql:/docker-entrypoint-initdb.d/01-address_create.sql
+      - ./sql/person_create.sql:/docker-entrypoint-initdb.d/02-person_create.sql
+      - ./sql/person_addresses_create.sql:/docker-entrypoint-initdb.d/03-person_addresses_create.sql
+      - ./sql/procedure_create.sql:/docker-entrypoint-initdb.d/04-procedure_create.sql
+      - ./sql/person_specialties_create.sql:/docker-entrypoint-initdb.d/05-person_specialties_create.sql
+      - ./sql/treatment_create.sql:/docker-entrypoint-initdb.d/06-treatment_create.sql
+      - ./sql/appointment_create.sql:/docker-entrypoint-initdb.d/07-appointment_create.sql
+      - ./sql/procedure_insert.sql:/docker-entrypoint-initdb.d/08-procedure_insert.sql
+      - ./sql/professional_insert.sql:/docker-entrypoint-initdb.d/09-professional_insert.sql
+      - ./sql/pacient_insert.sql:/docker-entrypoint-initdb.d/10-pacient_insert.sql
+      - ./sql/address_insert.sql:/docker-entrypoint-initdb.d/11-address_insert.sql
+      - ./sql/person_address_insert.sql:/docker-entrypoint-initdb.d/12-person_address_insert.sql
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+  clintech-procedure:
+    container_name: procedure
+    image: springboot-postgresq-procedure
+    build: ./clintech-procedure
+    ports: 
+      - "8084:8084"
+    depends_on:
+      - db
+    links:
+      - db:database
+  clintech-professional:
+    container_name: professional
+    image: springboot-postgresq-professional
+    build: ./clintech-professional
+    ports: 
+      - "8086:8086"
+    depends_on:
+      - db
+    links:
+      - db:database
+  clintech-patient:
+    container_name: patient
+    image: springboot-postgresq-patient
+    build: ./clintech-patient
+    ports: 
+      - "8085:8085"
+    depends_on:
+      - db
+    links:
+      - db:database
+  clintech-appointment:
+    container_name: appointment
+    image: springboot-postgresq-appointment
+    build: ./clintech-appointment
+    ports: 
+      - "8087:8087"
+    depends_on:
+      - db
+    links:
+      - db:database
+  clintech-mail-consumer:
+    container_name: mail-consumer
+    image: springboot-mail-consumer
+    build: ./clintech-mail-consumer
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq:rabbitmq
+  clintech-mail-producer:
+    container_name: mail-producer
+    image: springboot-mail-producer
+    build: ./clintech-mail-producer
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq:rabbitmq

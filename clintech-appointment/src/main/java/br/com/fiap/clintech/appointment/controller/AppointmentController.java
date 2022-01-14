@@ -1,0 +1,116 @@
+package br.com.fiap.clintech.appointment.controller;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+
+import br.com.fiap.clintech.appointment.dao.bean.Appointment;
+import br.com.fiap.clintech.appointment.dao.bean.Treatment;
+import br.com.fiap.clintech.appointment.dto.AppointmentDto;
+import br.com.fiap.clintech.appointment.dto.TreatmentDto;
+import br.com.fiap.clintech.appointment.service.AppointmentService;
+
+@RestController
+@RequestMapping("appointment")
+public class AppointmentController {
+	private static transient Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+	
+	@Autowired
+	private AppointmentService service;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+	
+	@PostMapping
+	public Appointment saveAppointment(@RequestBody AppointmentDto appointment) {
+		Appointment savedAppointment = this.service.saveAppointment(convertToEntity(appointment));
+				
+		Gson gson = new Gson();
+		
+		String message = gson.toJson(savedAppointment);
+		rabbitTemplate.convertAndSend("spring-boot-exchange", "br.com.fiap.clintech", message);
+		
+		return savedAppointment;
+	}
+	
+	@GetMapping("/{id}")
+	public AppointmentDto getAppointment(@PathVariable("id") Long id) {
+		return convertToDto(this.service.getAppointment(id));
+	}
+	
+	@GetMapping("/list/{id}")
+	public List<AppointmentDto> getAppointmentsByPatient(@PathVariable("id") Long id) {
+		return convertToDtoList(this.service.getAppointmentsByPatient(id));
+	}
+	
+	@DeleteMapping("/{id}")
+	public String deleteAppointment(@PathVariable("id") Long id) {
+		try {
+			this.service.deleteAppointment(this.service.getAppointment(id));
+		}catch(Exception e) {
+			logger.error("Unable to delete appointment.", e);
+		}
+		return "Appointment deleted.";
+	}
+	
+	private AppointmentDto convertToDto(Appointment appointment) {
+		AppointmentDto appointmentDto = modelMapper.map(appointment, AppointmentDto.class);
+		appointmentDto.setTreatment(this.convertTreatmentToDto(appointment.getTreatment()));
+		appointmentDto.setDate(appointment.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+		
+	    return appointmentDto;
+	}
+	
+	private List<AppointmentDto> convertToDtoList(List<Appointment> appointments) {
+		logger.info("Appointments to convert: {}", appointments.size());
+		List<AppointmentDto> appointmentsList = new ArrayList<AppointmentDto>();
+		appointments.forEach(appointment -> {
+			appointmentsList.add(convertToDto(appointment));
+		});
+		
+		return appointmentsList;
+	}
+	
+	private Appointment convertToEntity(AppointmentDto appointmentDto){
+		Appointment appointment = modelMapper.map(appointmentDto, Appointment.class);
+		appointment.setDate(LocalDate.parse(appointmentDto.getDate(), DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+		appointment.setTime(LocalTime.parse(appointmentDto.getTime(), DateTimeFormatter.ofPattern("HH:mm")));
+		
+		appointment.setTreatment(this.convertTreatmentToEntity(appointmentDto.getTreatment()));
+		
+		return appointment;
+	}
+	
+//	private List<TreatmentDto> convertToDtoList(List<Treatment> treatments) {
+//		return modelMapper.map(treatments, List.class);
+//	}
+//	
+	public TreatmentDto convertTreatmentToDto(Treatment treatment) {
+		return modelMapper.map(treatment, TreatmentDto.class);
+	}
+	
+	public Treatment convertTreatmentToEntity(TreatmentDto treatmentDto){
+		return modelMapper.map(treatmentDto, Treatment.class);
+
+	}
+}

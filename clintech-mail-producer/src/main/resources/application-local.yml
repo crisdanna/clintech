@@ -1,0 +1,12 @@
+#RabbitMQ settings
+spring:
+    rabbitmq:
+        host: localhost
+        virtualhost: /
+#        port: 15672
+        username: guest
+        password: guest
+
+rabbitmq:
+    queue: rabbitmq.queue
+    exchange: rabbitmq.exchange

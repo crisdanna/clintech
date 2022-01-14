@@ -1,0 +1,8 @@
+server:
+    port: 8090
+    servlet:
+        context-path: /clintech
+
+spring:
+    profiles:
+        active: ${ACTIVE_PROFILE:dev}
