@@ -32,6 +32,7 @@ services:
       - ./sql/person_address_insert.sql:/docker-entrypoint-initdb.d/12-person_address_insert.sql
   rabbitmq:
     image: rabbitmq:management
+    container_name: rabbitmq_host
     ports:
         - "5672:5672"
         - "15672:15672"
@@ -79,15 +80,19 @@ services:
     container_name: mail-consumer
     image: springboot-mail-consumer
     build: ./clintech-mail-consumer
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq_host
     depends_on:
       - rabbitmq
     links:
-      - rabbitmq:rabbitmq
+      - rabbitmq:rabbitmq_host
   clintech-mail-producer:
-    container_name: mail-producer
-    image: springboot-mail-producer
-    build: ./clintech-mail-producer
-    depends_on:
-      - rabbitmq
-    links:
-      - rabbitmq:rabbitmq
+   container_name: mail-producer
+   image: springboot-mail-producer
+   build: ./clintech-mail-producer
+   environment:
+      SPRING_RABBITMQ_HOST: rabbitmq_host
+   depends_on:
+     - rabbitmq
+   links:
+     - rabbitmq:rabbitmq_host
