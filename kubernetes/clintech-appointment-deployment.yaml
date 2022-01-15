@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose-windows-amd64.exe convert -f C:\Users\crist\git\clintech\docker-compose.yml
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: clintech-appointment
+  name: clintech-appointment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: clintech-appointment
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose-windows-amd64.exe convert -f C:\Users\crist\git\clintech\docker-compose.yml
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: clintech-appointment
+    spec:
+      containers:
+        - image: springboot-postgresq-appointment
+          name: appointment
+          ports:
+            - containerPort: 8087
+          resources: {}
+      restartPolicy: Always
+status: {}
