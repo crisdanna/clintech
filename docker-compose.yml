@@ -90,6 +90,8 @@ services:
    container_name: mail-producer
    image: springboot-mail-producer
    build: ./clintech-mail-producer
+   ports: 
+      - "8090:8090"
    environment:
       SPRING_RABBITMQ_HOST: rabbitmq_host
    depends_on:
