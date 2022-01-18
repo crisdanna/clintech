@@ -6,7 +6,7 @@ import { HttpService } from './http.service';
   providedIn: 'root',
 })
 export class SchedulingService {
-  appointmentPath = '/appointment';
+  appointmentPath = 'http://localhost:8087/clintech/appointment';
 
   constructor(public http: HttpService) {}
 

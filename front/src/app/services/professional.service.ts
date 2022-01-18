@@ -5,7 +5,7 @@ import { HttpService } from './http.service';
   providedIn: 'root',
 })
 export class ProfessionalService {
-  professionalPath = '/professional';
+  professionalPath = 'http://localhost:8086/clintech/professional';
 
   constructor(private http: HttpService) {}
 
