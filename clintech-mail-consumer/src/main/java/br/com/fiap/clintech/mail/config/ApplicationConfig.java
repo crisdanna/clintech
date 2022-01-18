@@ -15,13 +15,6 @@ public class ApplicationConfig {
 	
 	@Bean
 	public Queue queue() {
-//		return QueueBuilder.durable(queueName).build();
 		return new Queue(queueName);
 	}
-
-//	@Bean
-//	public ConnectionFactory connectionFactory() {
-//		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-//		return connectionFactory;
-//	}
 }

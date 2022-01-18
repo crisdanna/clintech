@@ -9,7 +9,6 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.google.gson.Gson;
 
 import br.com.fiap.clintech.appointment.dao.bean.Appointment;
 import br.com.fiap.clintech.appointment.dao.bean.Treatment;
@@ -38,18 +35,9 @@ public class AppointmentController {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
-	
 	@PostMapping
 	public Appointment saveAppointment(@RequestBody AppointmentDto appointment) {
 		Appointment savedAppointment = this.service.saveAppointment(convertToEntity(appointment));
-				
-		Gson gson = new Gson();
-		
-		String message = gson.toJson(savedAppointment);
-		rabbitTemplate.convertAndSend("spring-boot-exchange", "br.com.fiap.clintech", message);
-		
 		return savedAppointment;
 	}
 	
