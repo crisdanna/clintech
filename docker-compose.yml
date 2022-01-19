@@ -1,10 +1,9 @@
-
 # Start docker desktop
 # Maybe is necessary install docker compose using the command: docker-compose pull
 # Run using command (this option makes terminal blocked): docker-compose up db 
 # Run using command (this option makes terminal free): docker-compose up -d
 
-version: '3.8'
+version: '3.6'
 
 services:
   db:
@@ -15,7 +14,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_DB: "postgres"
     ports:
-      - "5432:5432" 
+      - "5432:5432"
     volumes:
       #From Github without microservices files
       - ./sql/address_create.sql:/docker-entrypoint-initdb.d/01-address_create.sql
@@ -34,13 +33,13 @@ services:
     image: rabbitmq:management
     container_name: rabbitmq_host
     ports:
-        - "5672:5672"
-        - "15672:15672"
+      - "5672:5672"
+      - "15672:15672"
   clintech-procedure:
     container_name: procedure
     image: springboot-postgresq-procedure
     build: ./clintech-procedure
-    ports: 
+    ports:
       - "8084:8084"
     depends_on:
       - db
@@ -50,7 +49,7 @@ services:
     container_name: professional
     image: springboot-postgresq-professional
     build: ./clintech-professional
-    ports: 
+    ports:
       - "8086:8086"
     depends_on:
       - db
@@ -60,7 +59,7 @@ services:
     container_name: patient
     image: springboot-postgresq-patient
     build: ./clintech-patient
-    ports: 
+    ports:
       - "8085:8085"
     depends_on:
       - db
@@ -70,7 +69,7 @@ services:
     container_name: appointment
     image: springboot-postgresq-appointment
     build: ./clintech-appointment
-    ports: 
+    ports:
       - "8087:8087"
     depends_on:
       - db
@@ -87,14 +86,14 @@ services:
     links:
       - rabbitmq:rabbitmq_host
   clintech-mail-producer:
-   container_name: mail-producer
-   image: springboot-mail-producer
-   build: ./clintech-mail-producer
-   ports: 
+    container_name: mail-producer
+    image: springboot-mail-producer
+    build: ./clintech-mail-producer
+    ports:
       - "8090:8090"
-   environment:
+    environment:
       SPRING_RABBITMQ_HOST: rabbitmq_host
-   depends_on:
-     - rabbitmq
-   links:
-     - rabbitmq:rabbitmq_host
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq:rabbitmq_host
