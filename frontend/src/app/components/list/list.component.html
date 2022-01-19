@@ -1,0 +1,26 @@
+<mat-list>
+  <mat-list-item class="container" *ngFor="let item of schedules">
+    <div class="list" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <div>{{ formatDate(item.date) }} - {{ item.time }}</div>
+        <div>{{ item.treatment.procedure.name }}</div>
+      </div>
+      <div>
+        <button mat-icon-button (click)="info(item)">
+          <mat-icon>info</mat-icon>
+        </button>
+        <button mat-icon-button (click)="edit(item)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="remove(item.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-divider class="divider"></mat-divider>
+  </mat-list-item>
+</mat-list>
+
+<button class="add" mat-fab color="primary" (click)="create()">
+  <mat-icon>add</mat-icon>
+</button>
