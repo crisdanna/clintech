@@ -10,22 +10,22 @@ export class HttpService {
   constructor(private http: HttpClient) {}
 
   public findOne<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${environment.api}${endpoint}`);
+    return this.http.get<T>(`${endpoint}`);
   }
 
   public findAll<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${environment.api}${endpoint}`);
+    return this.http.get<T>(`${endpoint}`);
   }
 
   public create<T>(endpoint: string, data: T): Observable<T> {
-    return this.http.post<T>(`${environment.api}${endpoint}`, data);
+    return this.http.post<T>(`${endpoint}`, data);
   }
 
   public update<T>(endpoint: string, data: T): Observable<T> {
-    return this.http.put<T>(`${environment.api}${endpoint}`, data);
+    return this.http.put<T>(`${endpoint}`, data);
   }
 
   public delete<T>(endpoint: string): Observable<T> {
-    return this.http.delete<T>(`${environment.api}${endpoint}`);
+    return this.http.delete<T>(`${endpoint}`);
   }
 }
