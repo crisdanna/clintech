@@ -28,4 +28,8 @@ export class HttpService {
   public delete<T>(endpoint: string): Observable<T> {
     return this.http.delete<T>(`${endpoint}`);
   }
+
+  public send<T>(endpoint: string, data: T): Observable<T> {
+    return this.http.post<T>(`${endpoint}`, data);
+  }
 }

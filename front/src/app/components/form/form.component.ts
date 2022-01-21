@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProcedureService } from 'src/app/services/procedure.service';
 import { ProfessionalService } from 'src/app/services/professional.service';
 import { SchedulingService } from 'src/app/services/scheduling.service';
+import { MailService } from 'src/app/services/mail.service';
 import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MAT_MOMENT_DATE_FORMATS,
@@ -40,12 +41,20 @@ export class FormComponent implements OnInit {
     private procedureService: ProcedureService,
     private professionalService: ProfessionalService,
     private schedulingService: SchedulingService,
+    private mailService: MailService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<FormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     const formGroup = {
-      patient: [{ id: 7 }],
+      patient: [
+        {
+          id: 7,
+          name: 'Sam',
+          lastname: 'Dalton',
+          email: 'cristiane.danna@gmail.com',
+        },
+      ],
       procedure: [null],
     };
 
@@ -77,12 +86,18 @@ export class FormComponent implements OnInit {
         this.data.treatment.authorizationNumber;
       this.schedulingService
         .update(form)
-        .then(() => this.dialogRef.close())
+        .then(() => {
+          this.mailService.send(form);
+          this.dialogRef.close();
+        })
         .catch((err) => console.log('Erro ao cadastrar agendamento - ' + err));
     } else {
       this.schedulingService
         .create(form)
-        .then(() => this.dialogRef.close())
+        .then(() => {
+          this.mailService.send(form);
+          this.dialogRef.close();
+        })
         .catch((err) => console.log('Erro ao cadastrar agendamento - ' + err));
     }
   }
