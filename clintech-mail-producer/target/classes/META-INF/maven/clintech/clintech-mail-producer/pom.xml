@@ -11,6 +11,7 @@
 	<relativePath /> <!-- lookup parent from repository -->
   </parent>
   <build>
+    <finalName>clintech-mail-producer</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -46,12 +47,7 @@
 	    <groupId>org.springframework.amqp</groupId>
 	    <artifactId>spring-rabbit</artifactId>
 	</dependency>
-	
-<!-- 	<dependency> -->
-<!-- 	    <groupId>org.springframework.boot</groupId> -->
-<!-- 	    <artifactId>spring-boot-starter-mail</artifactId> -->
-<!-- 	</dependency> -->
-	
+
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>

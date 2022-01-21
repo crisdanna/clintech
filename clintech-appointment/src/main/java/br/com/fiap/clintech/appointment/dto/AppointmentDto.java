@@ -6,7 +6,7 @@ public class AppointmentDto {
 	
 	private String date;
 	private String time;
-	private Long professionalId;
+	private ProfessionalDto professional;
 	private TreatmentDto treatment;
 	
 	public void setId(Long id) {
@@ -27,11 +27,12 @@ public class AppointmentDto {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	public Long getProfessionalId() {
-		return professionalId;
+	
+	public ProfessionalDto getProfessional() {
+		return professional;
 	}
-	public void setProfessionalId(Long professionalId) {
-		this.professionalId = professionalId;
+	public void setProfessional(ProfessionalDto professional) {
+		this.professional = professional;
 	}
 	public TreatmentDto getTreatment() {
 		return treatment;
@@ -46,7 +47,7 @@ public class AppointmentDto {
 		sb.append("ID: ").append(this.getId()).append("\n");
 		sb.append("Date: ").append(this.getDate()).append("\n");
 		sb.append("Time: ").append(this.getTime()).append("\n");
-		sb.append("Professional ID:").append(this.professionalId).append("\n");
+		sb.append(this.professional.toString()).append("\n");
 		sb.append(this.treatment.toString()).append("\n");
 				
 		return sb.toString();

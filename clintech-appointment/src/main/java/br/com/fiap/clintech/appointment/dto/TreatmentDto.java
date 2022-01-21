@@ -6,8 +6,8 @@ public class TreatmentDto {
 	
 	private int authorizationNumber;
 	
-	private Long procedureId;
-	private Long patientId;
+	private ProcedureDto procedure;
+	private PatientDto patient;
 	
 	public int getAuthorizationNumber() {
 		return authorizationNumber;
@@ -21,17 +21,18 @@ public class TreatmentDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getProcedureId() {
-		return procedureId;
+
+	public ProcedureDto getProcedure() {
+		return procedure;
 	}
-	public void setProcedureId(Long procedureId) {
-		this.procedureId = procedureId;
+	public void setProcedure(ProcedureDto procedure) {
+		this.procedure = procedure;
 	}
-	public Long getPatientId() {
-		return patientId;
+	public PatientDto getPatient() {
+		return patient;
 	}
-	public void setPatientId(Long patientId) {
-		this.patientId = patientId;
+	public void setPatient(PatientDto patient) {
+		this.patient = patient;
 	}
 	@Override
 	public String toString() {
@@ -39,8 +40,8 @@ public class TreatmentDto {
 		sb.append("**** TREATMENT DTO **** \n");
 		sb.append("ID: ").append(this.getId()).append("\n");
 		sb.append("Authorization Number: ").append(this.getAuthorizationNumber()).append("\n");
-		sb.append("Patient ID: ").append(this.getPatientId()).append("\n");
-		sb.append("Procedure ID: ").append(this.getProcedureId()).append("\n");
+		sb.append(this.getPatient().toString()).append("\n");
+		sb.append(this.getProcedure().toString()).append("\n");
 				
 		return sb.toString();
 	}
