@@ -6,7 +6,7 @@ public class Treatment {
 	
 	private int authorizationNumber;
 	
-	private Long procedureId;
+	private Procedure procedure;
 	private Patient patient;
 	
 	public int getAuthorizationNumber() {
@@ -21,13 +21,12 @@ public class Treatment {
 	public Long getId() {
 		return id;
 	}
-	public Long getProcedureId() {
-		return procedureId;
+	public Procedure getProcedure() {
+		return procedure;
 	}
-	public void setProcedureId(Long procedureId) {
-		this.procedureId = procedureId;
+	public void setProcedure(Procedure procedure) {
+		this.procedure = procedure;
 	}
-
 	public Patient getPatient() {
 		return patient;
 	}
@@ -40,7 +39,7 @@ public class Treatment {
 		sb.append("**** TREATMENT **** \n");
 		sb.append("ID: ").append(this.getId()).append("\n");
 		sb.append("Authorization Number: ").append(this.getAuthorizationNumber()).append("\n");
-		sb.append("Procedure ID: ").append(this.getProcedureId()).append("\n");
+		sb.append(this.getProcedure().toString()).append("\n");
 		sb.append(this.patient.toString()).append("\n");
 				
 		return sb.toString();

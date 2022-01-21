@@ -14,8 +14,8 @@ public class TreatmentServiceImpl implements TreatmentService {
 	private TreatmentRepository repository;
 
 	@Override
-	public void saveTreatment(Treatment treatment) {
-		this.repository.save(treatment);
+	public Treatment saveTreatment(Treatment treatment) {
+		return this.repository.save(treatment);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class TreatmentServiceImpl implements TreatmentService {
 
 	@Override
 	public List<Treatment> getTreatmentsByPatient(Long id) {
-		return this.repository.findByPatientId(id);
+		return this.repository.findByPatient(id);
 	}
 
 }

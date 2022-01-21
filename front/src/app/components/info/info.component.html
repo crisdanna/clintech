@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Detalhes do Agendamento</h1>
+<div mat-dialog-content>
+  <p><strong>Data: </strong> {{ data.date }} - {{ data.time }}</p>
+  <p><strong>Procedimento: </strong> {{ data.treatment.procedure.name }}</p>
+  <p><strong>Profissional: </strong> {{ data.professional.name }}</p>
+  <p><strong>Telefone: </strong> {{ data.professional.phone }}</p>
+  <p><strong>Email: </strong> {{ data.professional.email }}</p>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+  <button mat-button [mat-dialog-close] cdkFocusInitial>Ok</button>
+</div>

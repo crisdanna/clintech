@@ -1,0 +1,19 @@
+::ng-deep .container {
+  height: 65px !important;
+}
+
+.list {
+  width: 100%;
+}
+
+.divider {
+  height: 1px;
+}
+
+.add {
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  margin: auto;
+  bottom: 40px;
+}

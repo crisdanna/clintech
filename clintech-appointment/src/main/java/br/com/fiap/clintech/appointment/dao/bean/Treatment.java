@@ -1,12 +1,15 @@
 package br.com.fiap.clintech.appointment.dao.bean;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "treatment")
@@ -19,8 +22,12 @@ public class Treatment {
 	
 	private int authorizationNumber;
 	
-	private Long procedureId;
-	private Long patientId;
+	@OneToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "procedureId")
+	private Procedure procedure;
+	
+	@ManyToOne
+	private Patient patient;
 	
 	public int getAuthorizationNumber() {
 		return authorizationNumber;
@@ -28,32 +35,33 @@ public class Treatment {
 	public void setAuthorizationNumber(int authorizationNumber) {
 		this.authorizationNumber = authorizationNumber;
 	}
+	public Procedure getProcedure() {
+		return procedure;
+	}
+	public void setProcedure(Procedure procedure) {
+		this.procedure = procedure;
+	}
 	public void setId(Long id) {
 		this.id = id;
 	}
 	public Long getId() {
 		return id;
 	}
-	public Long getProcedureId() {
-		return procedureId;
+	public Patient getPatient() {
+		return patient;
 	}
-	public void setProcedureId(Long procedureId) {
-		this.procedureId = procedureId;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
-	public Long getPatientId() {
-		return patientId;
-	}
-	public void setPatientId(Long patientId) {
-		this.patientId = patientId;
-	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("**** TREATMENT **** \n");
 		sb.append("ID: ").append(this.getId()).append("\n");
 		sb.append("Authorization Number: ").append(this.getAuthorizationNumber()).append("\n");
-		sb.append("Patient ID: ").append(this.getPatientId()).append("\n");
-		sb.append("Procedure ID: ").append(this.getProcedureId()).append("\n");
+		sb.append(this.getPatient().toString()).append("\n");
+		sb.append(this.getProcedure().toString()).append("\n");
 				
 		return sb.toString();
 	}

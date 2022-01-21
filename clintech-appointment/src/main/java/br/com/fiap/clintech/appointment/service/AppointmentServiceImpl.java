@@ -29,17 +29,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 		
 		Treatment treatment = null;
 		try{
-			List<Treatment> treatments = this.treatmentService.getTreatmentsByPatient(appointment.getTreatment().getPatientId());
+			List<Treatment> treatments = this.treatmentService.getTreatmentsByPatient(appointment.getTreatment().getPatient().getId());
 			
 			Stream<Treatment> existingTreatment = treatments.stream()
-				.filter(t -> t.getProcedureId() == appointment.getTreatment().getProcedureId());
+				.filter(t -> t.getProcedure().getId() == appointment.getTreatment().getProcedure().getId());
 			treatment = existingTreatment.findFirst().get();
 		}catch (Exception e) {
-			logger.warn("No treatment found for patient and procedure.");
+			logger.warn("No treatment found for patient and procedure.", e);
 		}
 		
 		if(treatment == null) {
-			this.treatmentService.saveTreatment(appointment.getTreatment());
+			treatment = this.treatmentService.saveTreatment(appointment.getTreatment());
 		}
 		
 		appointment.setTreatment(treatment);
